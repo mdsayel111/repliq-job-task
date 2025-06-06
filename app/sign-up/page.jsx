@@ -5,10 +5,13 @@ import React from "react";
 import Input from "@/components/shared/input/Input";
 import axiosInstance from "@/utils/axios-instance";
 import toast from "react-hot-toast";
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from "next/navigation";
+import { setUser } from "@/redux/slices/user-slice";
+import { useDispatch } from "react-redux";
 
 export default function SignUp() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
@@ -17,12 +20,14 @@ export default function SignUp() {
     const email = form.email.value;
     const password = form.password.value;
     try {
-      await axiosInstance.post("/sign-up", {
+      const resData = await axiosInstance.post("/sign-up", {
         name,
         number,
         email,
         password,
       });
+      console.log("Dispatching user:", resData.data); // ✅ Check this
+      dispatch(setUser(resData.data));
       toast.success("Sign up successful");
       router.push("/");
     } catch (error) {

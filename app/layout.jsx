@@ -1,9 +1,9 @@
+import Navbar from "@/components/Navbar";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import TanstackProvider from "@/providers/TanstackProvider";
 import { Toaster } from "react-hot-toast";
+import { ReduxProviders } from "@/providers/ReduxProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,11 +28,13 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <TanstackProvider>
-          <Navbar />
-          {children}
-          <Toaster />
-        </TanstackProvider>
+        <ReduxProviders>
+          <TanstackProvider>
+            <Navbar />
+            {children}
+            <Toaster />
+          </TanstackProvider>
+        </ReduxProviders>
       </body>
     </html>
   );

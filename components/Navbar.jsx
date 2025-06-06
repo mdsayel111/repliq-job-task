@@ -1,7 +1,9 @@
+"use client";
 import Link from "next/link";
-import React from "react";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const user = useSelector((state) => state.user);
   return (
     <nav className="fixed z-50 w-full bg-white  md:absolute md:bg-transparent">
       <div className="container m-auto px-2 md:px-12 lg:px-7">
@@ -70,26 +72,28 @@ const Navbar = () => {
               </ul>
             </div>
 
-            <div className="w-full min-w-max space-y-2 border-yellow-200 lg:space-y-0 sm:w-max lg:border-l ">
-              <button
-                type="button"
-                title="Start buying"
-                className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
-              >
-                <span className="block text-yellow-800 font-semibold text-sm">
-                  <Link href={"/sign-up"}>Sign up</Link>
-                </span>
-              </button>
-              <button
-                type="button"
-                title="Start buying"
-                className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
-              >
-                <span className="block text-yellow-900 font-semibold text-sm">
-                  <Link href={"/login"}>Login</Link>
-                </span>
-              </button>
-            </div>
+            {!user?.email && (
+              <div className="w-full min-w-max space-y-2 border-yellow-200 lg:space-y-0 sm:w-max lg:border-l ">
+                <button
+                  type="button"
+                  title="Start buying"
+                  className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
+                >
+                  <span className="block text-yellow-800 font-semibold text-sm">
+                    <Link href={"/sign-up"}>Sign up</Link>
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  title="Start buying"
+                  className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
+                >
+                  <span className="block text-yellow-900 font-semibold text-sm">
+                    <Link href={"/login"}>Login</Link>
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
