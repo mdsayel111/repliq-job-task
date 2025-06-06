@@ -6,23 +6,28 @@ import Input from "@/components/shared/input/Input";
 import axiosInstance from "@/utils/axios-instance";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/redux/slices/user-slice";
 
 export default function Login() {
   const router = useRouter();
+  const dispatch = useDispatch();
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const email = form.email.value;
     const password = form.password.value;
     try {
-      await axiosInstance.post("/login", {
+      const resData = await axiosInstance.post("/login", {
         email,
         password,
       });
+      dispatch(setUser(resData.data));
       toast.success("Login successful");
       router.push("/");
     } catch (error) {
-      if (error.response.status === 401) {
+      console.log(error);
+      if (error?.response?.status === 401) {
         return toast.error("Email or password is incorrect");
       }
       toast.error("Login failed");
