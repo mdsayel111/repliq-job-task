@@ -26,7 +26,6 @@ export default function SignUp() {
         email,
         password,
       });
-      console.log("Dispatching user:", resData.data); // ✅ Check this
       dispatch(setUser(resData.data));
       toast.success("Sign up successful");
       router.push("/");
