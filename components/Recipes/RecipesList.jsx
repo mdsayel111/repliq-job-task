@@ -1,11 +1,10 @@
 "use client";
 import HttpKit from "@/common/helpers/HttpKit";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import RecipeCard from "./RecipeCard";
+import { useEffect, useState } from "react";
 import Modal from "../Modal";
+import RecipeCard from "./RecipeCard";
 import SingleRecipe from "./SingleRecipe";
-import fetchAndSetData from "@/common/helpers/fetch-data";
 
 const RecipesList = () => {
   const [openDetails, setOpenDetails] = useState(false);
@@ -30,8 +29,8 @@ const RecipesList = () => {
   };
 
   const handleDetailsOpen = (id) => {
-    setOpenDetails(true);
     setRecipeId(id);
+    setOpenDetails(true);
   };
 
   if (isLoading) return <div>Loading recipes...</div>;
@@ -94,7 +93,8 @@ const RecipesList = () => {
 
       {/* Modal*/}
       <Modal isOpen={openDetails} setIsOpen={setOpenDetails}>
-        <SingleRecipe id={recipeId} setIsOpen={setOpenDetails} />
+        {console.log(recipeId, "recipeId")}
+        {recipeId && <SingleRecipe id={recipeId} setIsOpen={setOpenDetails} />}
       </Modal>
     </div>
   );

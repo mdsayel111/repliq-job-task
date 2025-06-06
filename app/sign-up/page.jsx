@@ -30,6 +30,7 @@ export default function SignUp() {
       toast.success("Sign up successful");
       router.push("/");
     } catch (error) {
+      console.log(error);
       toast.error("Sign up failed");
     }
   };

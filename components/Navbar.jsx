@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user?.user);
 
   const handleLogout = async () => {
     try {
@@ -75,6 +75,14 @@ const Navbar = () => {
                     className="block md:px-4 transition hover:text-yellow-700"
                   >
                     <span>All recipes</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/all-recipes"
+                    className="block md:px-4 transition hover:text-yellow-700"
+                  >
+                    <span>My recipes</span>
                   </Link>
                 </li>
                 <li>

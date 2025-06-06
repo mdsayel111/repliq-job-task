@@ -1,13 +1,16 @@
 import Image from "next/image";
-import React from "react";
 import { FaRegHeart } from "react-icons/fa";
 
-const RecipeCard = ({ recipe, handleDetailsOpen }) => {
+const RecipeCard = ({
+  isWishlist,
+  recipe,
+  handleDetailsOpen,
+  handleAddToWishlist,
+  handleAddToCart,
+}) => {
+  console.log(isWishlist, "isWishlist");
   return (
-    <div
-      onClick={() => handleDetailsOpen(recipe?.idMeal)}
-      className="group space-y-6 border border-gray-100  rounded-3xl bg-white  px-4 py-4 text-center shadow hover:cursor-pointer hover:shadow-xl transition duration-200 shadow-gray-600/10 flex flex-col"
-    >
+    <div className="group space-y-6 border border-gray-100  rounded-3xl bg-white  px-4 py-4 text-center shadow hover:cursor-pointer hover:shadow-xl transition duration-200 shadow-gray-600/10 flex flex-col">
       <div className="relative">
         <Image
           className="mx-auto rounded-2xl"
@@ -17,7 +20,12 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
           width={500}
           height={500}
         />
-        <div className="absolute top-4 right-4 p-3 bg-gray-300 rounded-full">
+        <div
+          onClick={() => handleAddToWishlist(recipe, isWishlist)}
+          className={`absolute top-4 right-4 p-3 bg-gray-300 rounded-full ${
+            isWishlist && "bg-red-400 text-white"
+          }`}
+        >
           <FaRegHeart className="text-xl" />
         </div>
       </div>
@@ -36,7 +44,10 @@ const RecipeCard = ({ recipe, handleDetailsOpen }) => {
         >
           Details
         </button>
-        <button className="bg-yellow-300 text-yellow-900 px-4 py-2 rounded-xl">
+        <button
+          onClick={() => handleAddToCart(recipe)}
+          className="bg-yellow-300 text-yellow-900 px-4 py-2 rounded-xl"
+        >
           Add to cart
         </button>
       </div>
