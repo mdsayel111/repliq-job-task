@@ -1,23 +1,25 @@
 import Image from "next/image";
-import React from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { IoMdAdd } from "react-icons/io";
-import { FiMinus } from "react-icons/fi";
 
-export default function Cart() {
+export default function Cart({ data }) {
   return (
     <div className="flex justify-between items-center">
-      <div className="flex justify-center items-center gap-4">
-        <Image
-          src="/images/home/food.webp"
-          alt="Cart"
-          width={500}
-          height={500}
-          className="w-[100px] aspect-square border border-yellow-300 rounded-lg"
-        />
-        <h1 className="text-lg font-semibold">Name</h1>
-      </div>
-      <div className="flex gap-4 items-center">
+      <Image
+        src={data.strMealThumb}
+        alt="Cart"
+        width={500}
+        height={500}
+        className="w-[10%] aspect-square border border-yellow-300 rounded-lg"
+      />
+      <h1 className="text-lg font-semibold w-[30%] text-center">
+        {data?.strMeal}
+      </h1>
+      <p className="w-[50%] text-center">
+        Obcaecati, quam? Eligendi, nulla numquam natus laborum porro at cum,
+        consectetur ullam tempora ipsa iste officia sed officiis! Incidunt ea
+        animi officiis.
+      </p>
+      {/* <div className="flex gap-4 items-center">
         <button className="p-2 bg-yellow-500 rounded-full">
           <FiMinus />
         </button>
@@ -25,8 +27,8 @@ export default function Cart() {
         <button className=" p-2 bg-green-500 rounded-full">
           <IoMdAdd />
         </button>
-      </div>
-      <FaRegTrashAlt className="text-red-500 cursor-pointer text-xl" />
+      </div> */}
+      <FaRegTrashAlt className="text-red-500 cursor-pointer text-xl w-[5%]" />
     </div>
   );
 }
