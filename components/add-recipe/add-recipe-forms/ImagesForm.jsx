@@ -1,27 +1,57 @@
+"use client";
+
 import FileInput from "@/components/shared/input/FIleInput";
+import axiosInstance from "@/utils/axios-instance";
+import { uploadImage } from "@/utils/upload-image";
 import Image from "next/image";
-import React, { useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { CiCirclePlus } from "react-icons/ci";
+import { useSelector } from "react-redux";
 
 export default function ImagesForm({ setStep }) {
+  const router = useRouter();
+  const infoFromStore = useSelector((state) => state.recipe.info);
   const fileInputRef = useRef(null);
   const [images, setImages] = useState([]);
-  const [currentImages, setCurrentImages] = useState([]);
   const [coverImage, setCoverImage] = useState("");
+  const [isSubmitBtnDisabled, setIsSubmitBtnDisabled] = useState(true);
+
+  useEffect(() => {
+    if (images.length > 0 && coverImage) {
+      setTimeout(() => {
+        setIsSubmitBtnDisabled(false);
+      }, 1000);
+    } else {
+      setIsSubmitBtnDisabled(true);
+    }
+  }, [images, coverImage]);
 
   const handleImageOnChange = (e) => {
     const files = Array.from(e.target.files);
-    setCurrentImages(files);
+    setImages(files);
   };
 
-  const handleAddImages = () => {
-    setImages([...images, ...currentImages]);
-    setCurrentImages([]);
-    fileInputRef.current.value = null;
-  };
+  const handleSubmit = async () => {
+    const reqInfo = { ...infoFromStore };
+    const coverImageUrl = await uploadImage(coverImage);
+    reqInfo.coverImage = coverImageUrl;
+    reqInfo.images = [];
 
-  const handleSubmit = () => {
-    console.log(images);
+    for (let i = 0; i < images.length; i++) {
+      const imageUrl = await uploadImage(images[i]);
+      reqInfo.images.push(imageUrl);
+    }
+
+    try {
+      await axiosInstance.post("/recipe", reqInfo);
+      toast.success("Recipe submitted successfully");
+      router.push("/all-recipes");
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
   return (
     <div>
@@ -43,28 +73,13 @@ export default function ImagesForm({ setStep }) {
               alt="Preview"
               width={500}
               height={500}
-              className="w-full aspect-square object-cover rounded-lg"
+              className="w-1/2 aspect-square object-cover rounded-lg mx-auto mt-6"
             />
           )}
         </div>
-
-        {/* Display added images */}
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          {images.map((img, idx) => (
-            <div key={idx} className="border rounded p-2">
-              <Image
-                src={URL.createObjectURL(img)}
-                alt={`Preview ${idx}`}
-                width={500}
-                height={500}
-                className="w-full aspect-square object-cover rounded-lg"
-              />
-            </div>
-          ))}
-        </div>
       </div>
       <div>
-        <div className="flex gap-4 items-center w-full">
+        <div className="flex gap-4 items-center w-full mt-8">
           <FileInput
             name="imageFile"
             placeholder="Image"
@@ -75,9 +90,6 @@ export default function ImagesForm({ setStep }) {
               ref: fileInputRef,
             }}
           />
-          <button onClick={handleAddImages} type="button">
-            <CiCirclePlus className="text-yellow-900 text-2xl mt-8" />
-          </button>
         </div>
 
         {/* Display added images */}
@@ -104,7 +116,10 @@ export default function ImagesForm({ setStep }) {
           Prev
         </button>
         <button
-          className="bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2"
+          disabled={isSubmitBtnDisabled}
+          className={`bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2 ${
+            isSubmitBtnDisabled ? "bg-[#b3b3b321]" : ""
+          }`}
           onClick={handleSubmit}
         >
           Submit

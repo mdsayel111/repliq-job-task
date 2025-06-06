@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TextArea({ name, placeholder, label }) {
+export default function TextArea({ name, placeholder, label, inputProps }) {
   return (
     <div>
       <label
@@ -18,6 +18,7 @@ export default function TextArea({ name, placeholder, label }) {
           placeholder={placeholder}
           rows={5}
           className="block resize-none w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-none border border-yellow-300 focus:border-yellow-700 placeholder:text-gray-400 sm:text-sm/6"
+          {...inputProps}
         />
       </div>
     </div>

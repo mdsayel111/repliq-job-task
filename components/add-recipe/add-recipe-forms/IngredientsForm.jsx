@@ -1,11 +1,25 @@
 import Input from "@/components/shared/input/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CiCirclePlus } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { setIngredients as setIngredientsAction } from "@/redux/slices/add-recipe-slice";
 
-export default function IngredientsForm({setStep}) {
-  const [ingredients, setIngredients] = useState([]);
+export default function IngredientsForm({ setStep }) {
+  const dispatch = useDispatch();
+  const ingredientsFromStore = useSelector((state) => state.recipe.ingredients);
+  const [ingredients, setIngredients] = useState(ingredientsFromStore);
   const [currentIngredient, setCurrentIngredient] = useState("");
+  const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(true);
+
+  useEffect(() => {
+    if (ingredients.length > 0) {
+      setIsNextBtnDisabled(false);
+    } else {
+      setIsNextBtnDisabled(true);
+    }
+  }, [ingredients]);
+
   const handleIngredients = () => {
     if (currentIngredient === "") {
       toast.error("Please enter ingredients");
@@ -13,6 +27,11 @@ export default function IngredientsForm({setStep}) {
     }
     setIngredients([...ingredients, currentIngredient]);
     setCurrentIngredient("");
+  };
+
+  const handleNext = () => {
+    dispatch(setIngredientsAction(ingredients));
+    setStep(3);
   };
   return (
     <div>
@@ -49,8 +68,11 @@ export default function IngredientsForm({setStep}) {
           Prev
         </button>
         <button
-          className="bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2"
-          onClick={() => setStep(3)}
+          disabled={isNextBtnDisabled}
+          className={`bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2 ${
+            isNextBtnDisabled ? "bg-[#b3b3b321]" : ""
+          }`}
+          onClick={handleNext}
         >
           Next
         </button>

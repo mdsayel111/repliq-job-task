@@ -1,18 +1,35 @@
 import Input from "@/components/shared/input/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { CiCirclePlus } from "react-icons/ci";
+import { useDispatch, useSelector } from "react-redux";
+import { setSteps as setStepsAction } from "@/redux/slices/add-recipe-slice";
 
 export default function StepsForm({ setStep }) {
-  const [steps, setSteps] = useState([]);
+  const dispatch = useDispatch();
+  const stepFromStore = useSelector((state) => state.recipe.steps);
+  const [steps, setSteps] = useState(stepFromStore);
   const [currentStep, setCurrentStep] = useState("");
+  const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(true);
+  useEffect(() => {
+    if (steps.length > 0) {
+      setIsNextBtnDisabled(false);
+    } else {
+      setIsNextBtnDisabled(true);
+    }
+  }, [steps]);
   const handleStep = () => {
-    if (currentIngredient === "") {
+    if (currentStep === "") {
       toast.error("Please enter step");
       return;
     }
     setSteps([...steps, currentStep]);
     setCurrentStep("");
+  };
+
+  const handleNext = () => {
+    dispatch(setStepsAction(steps));
+    setStep(4);
   };
   return (
     <div>
@@ -49,8 +66,11 @@ export default function StepsForm({ setStep }) {
           Prev
         </button>
         <button
-          className="bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2"
-          onClick={() => setStep(4)}
+          disabled={isNextBtnDisabled}
+          className={`bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2 ${
+            isNextBtnDisabled ? "bg-[#b3b3b321]" : ""
+          }`}
+          onClick={handleNext}
         >
           Next
         </button>

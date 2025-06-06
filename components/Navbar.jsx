@@ -1,15 +1,24 @@
 "use client";
 import { setUser } from "@/redux/slices/user-slice";
+import axiosInstance from "@/utils/axios-instance";
 // import { cookies } from "next/headers";
 import Link from "next/link";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
-  const handleLogout = () => {
-    dispatch(setUser({}));
+  const handleLogout = async () => {
+    try {
+      await axiosInstance.get("/logout");
+      dispatch(setUser({}));
+      toast.success("Logged out successfully");
+    } catch(error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    }
   };
   return (
     <nav className="fixed z-50 w-full bg-white  md:absolute md:bg-transparent">
