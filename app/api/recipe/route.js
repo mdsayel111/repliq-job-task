@@ -11,6 +11,7 @@ export async function POST(request) {
 export async function GET(request) {
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get("q");
+  const page = url.searchParams.get("p") - 1;
   await connectDB();
 
   let recipes;
@@ -18,13 +19,21 @@ export async function GET(request) {
 
   if (searchTerm && searchTerm.trim() !== "") {
     const regex = new RegExp(searchTerm, "i");
-    recipes = await Recipe.find({
+    const totalRecipes = await Recipe.countDocuments({
       $or: [{ title: regex }, { ingredients: regex }, { category: regex }],
     });
+    totalPages = Math.ceil(totalRecipes / 12);
+    recipes = Recipe.find({
+      $or: [{ title: regex }, { ingredients: regex }, { category: regex }],
+    })
+      .skip(page * 12)
+      .limit(12);
   } else {
-    recipes = await Recipe.find();
+    totalPages = Math.ceil((await Recipe.countDocuments()) / 12);
+    recipes = await Recipe.find()
+      .skip(page * 12)
+      .limit(12);
   }
-  totalPages = Math.ceil(recipes.length / 12);
 
-  return Response.json(recipes);
+  return Response.json({ recipes, totalPages });
 }

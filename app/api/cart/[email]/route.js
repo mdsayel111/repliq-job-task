@@ -13,9 +13,7 @@ export async function PATCH(request, { params }) {
 
   if (cartDoc) {
     const existingIds = new Set(cartDoc.cart.map((item) => item._id));
-    // console.log(existingIds, "existingIds");
     const newItems = data.filter((item) => !existingIds.has(item._id));
-    // console.log(newItems, "newItems");
 
     if (newItems.length > 0) {
       updatedCart = await Cart.findOneAndUpdate(

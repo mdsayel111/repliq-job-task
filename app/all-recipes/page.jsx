@@ -11,6 +11,7 @@ import {
   removeFromWishlist,
 } from "@/redux/slices/wishlist-slice";
 import fetchData from "@/utils/fetch-data";
+import { current } from "@reduxjs/toolkit";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -25,16 +26,18 @@ const AllRecipes = () => {
   const [recipeId, setRecipeId] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState(null);
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["recipes", searchQuery],
     queryFn: async () => {
-      const resData = await fetchData(`/recipe?q=${searchInput}`);
+      const resData = await fetchData(`/recipe?q=${searchInput}&p=${page}`);
       return resData;
     },
   });
 
-  console.log(data)
+  const recipes = data?.recipes;
+  const totalPages = data?.totalPages;
 
   const handleSearch = () => {
     setSearchQuery(searchInput);
@@ -63,6 +66,8 @@ const AllRecipes = () => {
     dispatch(addToCart({ recipe, email: user?.email }));
     toast.success("Added to cart");
   };
+
+  console.log(totalPages);
 
   return (
     <div className="pt-32">
@@ -100,7 +105,7 @@ const AllRecipes = () => {
           </form>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
-          {data?.map((recipe) => (
+          {recipes?.map((recipe) => (
             <RecipeCard
               key={recipe?._id}
               recipe={recipe}
@@ -116,7 +121,7 @@ const AllRecipes = () => {
         <Modal isOpen={openDetails} setIsOpen={setOpenDetails}>
           <SingleRecipe id={recipeId} setIsOpen={setOpenDetails} />
         </Modal>
-        <Pagination />
+        <Pagination totalPages={totalPages} page={page} setPage={setPage} />
       </div>
     </div>
   );

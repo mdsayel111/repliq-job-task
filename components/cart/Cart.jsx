@@ -1,7 +1,15 @@
+import { removeFromCart } from "@/redux/slices/cart-slice";
 import Image from "next/image";
+import { use } from "react";
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Cart({ data }) {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user?.user);
+  const handleDelete = () => {
+    dispatch(removeFromCart({ id: data?._id, email: user?.email }));
+  };
   return (
     <div className="flex flex-col gap-4 lg:flex-row justify-between items-center">
       <Image
@@ -26,9 +34,12 @@ export default function Cart({ data }) {
           <IoMdAdd />
         </button>
       </div> */}
-      <div className="text-white bg-red-500 rounded-full p-4 cursor-pointer text-xl lg:w-[5%]">
+      {/* <div
+        onClick={handleDelete}
+        className="text-white aspect-square flex justify-center items-center bg-red-500 rounded-full p-4 lg:p-2 cursor-pointer text-xl lg:w-[3%]"
+      >
         <FaRegTrashAlt />
-      </div>
+      </div> */}
     </div>
   );
 }
