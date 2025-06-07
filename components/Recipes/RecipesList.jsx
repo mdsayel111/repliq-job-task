@@ -68,12 +68,11 @@ const RecipesList = () => {
     toast.success("Added to cart");
   };
 
-
   if (error) return <div>Error loading recipes: {error.message}</div>;
 
   return (
     <div className="bg-gray-50 py-10">
-      <div className="container mx-auto">
+      <div className="w-[89%] mx-auto">
         <h1 className="text-2xl font-bold">Top Recipes</h1>
         {/* Search form */}
         <div>
@@ -107,7 +106,7 @@ const RecipesList = () => {
           </form>
         </div>
         <div className="relative py-16">
-          <div className="container relative m-auto px-6 text-gray-500 md:px-12">
+          <div className="container relative m-auto text-gray-500">
             {isLoading ? (
               <>Loading recipes...</>
             ) : (

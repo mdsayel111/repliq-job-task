@@ -12,9 +12,9 @@ export async function GET(request) {
     const regex = new RegExp(searchTerm, "i");
     recipes = await Recipe.find({
       $or: [{ title: regex }, { ingredients: regex }, { category: regex }],
-    }).sort({ createdAt: -1 });
+    }).sort({ createdAt: -1 }).limit(9);
   } else {
-    recipes = await Recipe.find();
+    recipes = await Recipe.find().limit(9);;
   }
 
   return Response.json(recipes);

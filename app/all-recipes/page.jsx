@@ -29,7 +29,7 @@ const AllRecipes = () => {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["recipes", searchQuery],
+    queryKey: ["recipes", searchQuery, page],
     queryFn: async () => {
       const resData = await fetchData(`/recipe?q=${searchInput}&p=${page}`);
       return resData;
@@ -66,7 +66,6 @@ const AllRecipes = () => {
     dispatch(addToCart({ recipe, email: user?.email }));
     toast.success("Added to cart");
   };
-
 
   return (
     <div className="pt-32">
@@ -127,5 +126,3 @@ const AllRecipes = () => {
 };
 
 export default AllRecipes;
-
-

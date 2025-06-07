@@ -30,7 +30,7 @@ const SingleRecipe = ({ id, setIsOpen }) => {
             className="rounded-lg w-1/2 mx-auto aspect-square object-cover"
           />
         </div>
-        <div className="grid grid-cols-4 gap-4 mt-4 lg:!mt-8">
+        <div className="flex gap-4 mt-4 lg:!mt-8 w-fit mx-auto">
           {data?.images.map((image, i) => (
             <Image
               key={i}
@@ -38,7 +38,7 @@ const SingleRecipe = ({ id, setIsOpen }) => {
               alt="Recipe"
               width={500}
               height={500}
-              className="rounded-lg aspect-square object-cover"
+              className="rounded-lg w-[20%] aspect-square object-cover"
             />
           ))}
         </div>

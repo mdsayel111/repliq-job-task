@@ -26,17 +26,14 @@ export async function GET(request) {
     const regex = new RegExp(searchTerm, "i");
 
     const filter = {
-      $or: [
-        { title: regex },
-        { ingredients: regex }, 
-        { category: regex },
-      ],
+      $or: [{ title: regex }, { ingredients: regex }, { category: regex }],
     };
 
     const totalRecipes = await Recipe.countDocuments(filter);
     totalPages = Math.ceil(totalRecipes / ITEMS_PER_PAGE);
 
     recipes = await Recipe.find(filter)
+      .sort({ createdAt: -1 })
       .skip(page * ITEMS_PER_PAGE)
       .limit(ITEMS_PER_PAGE);
   } else {
@@ -44,6 +41,7 @@ export async function GET(request) {
     totalPages = Math.ceil(totalRecipes / ITEMS_PER_PAGE);
 
     recipes = await Recipe.find()
+      .sort({ createdAt: -1 })
       .skip(page * ITEMS_PER_PAGE)
       .limit(ITEMS_PER_PAGE);
   }
