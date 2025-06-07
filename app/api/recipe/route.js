@@ -1,6 +1,7 @@
 import Recipe from "@/models/recipe";
 import connectDB from "@/utils/DB";
 
+// Create a new recipe
 export async function POST(request) {
   const body = await request.json();
   await connectDB();
@@ -8,31 +9,43 @@ export async function POST(request) {
   return Response.json(resData);
 }
 
+// Get recipes with optional search and pagination
 export async function GET(request) {
   const url = new URL(request.url);
-  const searchTerm = url.searchParams.get("q");
-  const page = url.searchParams.get("p") - 1;
+  const searchTerm = url.searchParams.get("q") || "";
+  const page = parseInt(url.searchParams.get("p") || "1") - 1;
+
   await connectDB();
 
   let recipes;
   let totalPages;
 
-  if (searchTerm && searchTerm.trim() !== "") {
+  const ITEMS_PER_PAGE = 12;
+
+  if (searchTerm.trim() !== "") {
     const regex = new RegExp(searchTerm, "i");
-    const totalRecipes = await Recipe.countDocuments({
-      $or: [{ title: regex }, { ingredients: regex }, { category: regex }],
-    });
-    totalPages = Math.ceil(totalRecipes / 12);
-    recipes = Recipe.find({
-      $or: [{ title: regex }, { ingredients: regex }, { category: regex }],
-    })
-      .skip(page * 12)
-      .limit(12);
+
+    const filter = {
+      $or: [
+        { title: regex },
+        { ingredients: regex }, 
+        { category: regex },
+      ],
+    };
+
+    const totalRecipes = await Recipe.countDocuments(filter);
+    totalPages = Math.ceil(totalRecipes / ITEMS_PER_PAGE);
+
+    recipes = await Recipe.find(filter)
+      .skip(page * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE);
   } else {
-    totalPages = Math.ceil((await Recipe.countDocuments()) / 12);
+    const totalRecipes = await Recipe.countDocuments();
+    totalPages = Math.ceil(totalRecipes / ITEMS_PER_PAGE);
+
     recipes = await Recipe.find()
-      .skip(page * 12)
-      .limit(12);
+      .skip(page * ITEMS_PER_PAGE)
+      .limit(ITEMS_PER_PAGE);
   }
 
   return Response.json({ recipes, totalPages });

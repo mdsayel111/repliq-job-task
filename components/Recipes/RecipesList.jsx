@@ -37,7 +37,7 @@ const RecipesList = () => {
 
   useEffect(() => {
     if (data) {
-      setRecipes(data?.recipes);
+      setRecipes(data);
     }
   }, [data]);
 
@@ -68,6 +68,8 @@ const RecipesList = () => {
     dispatch(addToCart({ recipe, email: user?.email }));
     toast.success("Added to cart");
   };
+
+  console.log(recipes, "recipes");
 
   if (error) return <div>Error loading recipes: {error.message}</div>;
 
