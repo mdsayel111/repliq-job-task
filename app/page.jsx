@@ -1,20 +1,11 @@
-// import Hero from "../components/Hero/Hero";
-// import RecipesList from "../components/Recipes/RecipesList";
+import Hero from "../components/Hero/Hero";
+import RecipesList from "../components/Recipes/RecipesList";
 
-// export default function Home() {
-//   return (
-//     <div>
-//       <Hero />
-//       <RecipesList />
-//     </div>
-//   );
-// }
-
-import React from 'react'
-
-export default function page() {
+export default function Home() {
   return (
-    <div>page</div>
-  )
+    <div>
+      <Hero />
+      <RecipesList />
+    </div>
+  );
 }
-
