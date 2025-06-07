@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const CartPage = () => {
   const cart = useSelector((state) => state.cart?.carts);
   return (
-    <div className="pt-32">
+    <div className="py-20 lg:py-32">
       <div className="w-[89%] mx-auto">
         {/* Cart page */}
         <h1 className="text-2xl font-bold">Cart</h1>

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 const Wishlist = () => {
   const wishlist = useSelector((state) => state.wishlist?.wishlist);
   return (
-    <div className="pt-32">
+    <div className="py-20 lg:py-32">
       <div className="w-[89%] mx-auto">
         {/* Cart page */}
         <h1 className="text-2xl font-bold">Wishlist</h1>

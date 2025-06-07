@@ -14,6 +14,7 @@ export async function GET(request) {
   await connectDB();
 
   let recipes;
+  let totalPages;
 
   if (searchTerm && searchTerm.trim() !== "") {
     const regex = new RegExp(searchTerm, "i");
@@ -23,6 +24,7 @@ export async function GET(request) {
   } else {
     recipes = await Recipe.find();
   }
+  totalPages = Math.ceil(recipes.length / 12);
 
   return Response.json(recipes);
 }
