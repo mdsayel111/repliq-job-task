@@ -8,6 +8,8 @@ import { setSteps as setStepsAction } from "@/redux/slices/add-recipe-slice";
 export default function StepsForm({ setStep }) {
   const dispatch = useDispatch();
   const stepFromStore = useSelector((state) => state.recipe.steps);
+  const ingredientsFromStore = useSelector((state) => state.recipe.ingredients);
+  console.log(ingredientsFromStore);
   const [steps, setSteps] = useState(stepFromStore);
   const [currentStep, setCurrentStep] = useState("");
   const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(true);
@@ -67,9 +69,7 @@ export default function StepsForm({ setStep }) {
         </button>
         <button
           disabled={isNextBtnDisabled}
-          className={`bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2 ${
-            isNextBtnDisabled ? "bg-[#b3b3b321]" : ""
-          }`}
+          className={`bg-yellow-300 disabled:bg-[#b3b3b321] text-yellow-900 px-3 py-1 rounded-lg block ml-2 `}
           onClick={handleNext}
         >
           Next

@@ -15,7 +15,7 @@ const Navbar = () => {
       await axiosInstance.get("/logout");
       dispatch(setUser({}));
       toast.success("Logged out successfully");
-    } catch(error) {
+    } catch (error) {
       toast.error("Something went wrong");
     }
   };
@@ -74,14 +74,6 @@ const Navbar = () => {
                     className="block md:px-4 transition hover:text-yellow-700"
                   >
                     <span>All recipes</span>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/all-recipes"
-                    className="block md:px-4 transition hover:text-yellow-700"
-                  >
-                    <span>My recipes</span>
                   </Link>
                 </li>
                 <li>

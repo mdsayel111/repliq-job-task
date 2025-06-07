@@ -30,6 +30,7 @@ export default function IngredientsForm({ setStep }) {
   };
 
   const handleNext = () => {
+    console.log(ingredients, "ingredients");
     dispatch(setIngredientsAction(ingredients));
     setStep(3);
   };
@@ -69,9 +70,7 @@ export default function IngredientsForm({ setStep }) {
         </button>
         <button
           disabled={isNextBtnDisabled}
-          className={`bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2 ${
-            isNextBtnDisabled ? "bg-[#b3b3b321]" : ""
-          }`}
+          className={`bg-yellow-300 disabled:bg-[#b3b3b321] text-yellow-900 px-3 py-1 rounded-lg block ml-2`}
           onClick={handleNext}
         >
           Next

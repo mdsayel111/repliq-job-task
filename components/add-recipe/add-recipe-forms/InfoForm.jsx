@@ -64,9 +64,7 @@ export default function InfoForm({ setStep }) {
       <div className="mt-6">
         <button
           disabled={isNextBtnDisabled}
-          className={`bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-auto ${
-              isNextBtnDisabled ? "bg-[#b3b3b321]" : ""
-          }`}
+          className={`bg-yellow-300 disabled:bg-[#b3b3b321] text-yellow-900 px-3 py-1 rounded-lg block ml-auto`}
           onClick={handleNext}
         >
           Next

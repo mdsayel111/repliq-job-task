@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 export default function ImagesForm({ setStep }) {
   const router = useRouter();
   const infoFromStore = useSelector((state) => state.recipe.info);
+  const ingredientsFromStore = useSelector((state) => state.recipe.ingredients);
+  const stepFromStore = useSelector((state) => state.recipe.steps);
   const fileInputRef = useRef(null);
   const [images, setImages] = useState([]);
   const [coverImage, setCoverImage] = useState("");
@@ -34,7 +36,11 @@ export default function ImagesForm({ setStep }) {
   };
 
   const handleSubmit = async () => {
-    const reqInfo = { ...infoFromStore };
+    const reqInfo = {
+      ...infoFromStore,
+      ingredients: ingredientsFromStore,
+      steps: stepFromStore,
+    };
     const coverImageUrl = await uploadImage(coverImage);
     reqInfo.coverImage = coverImageUrl;
     reqInfo.images = [];
@@ -116,9 +122,7 @@ export default function ImagesForm({ setStep }) {
         </button>
         <button
           disabled={isSubmitBtnDisabled}
-          className={`bg-yellow-300 text-yellow-900 px-3 py-1 rounded-lg block ml-2 ${
-            isSubmitBtnDisabled ? "bg-[#b3b3b321]" : ""
-          }`}
+          className={`bg-yellow-300 disabled:bg-[#b3b3b321] text-yellow-900 px-3 py-1 rounded-lg block ml-2`}
           onClick={handleSubmit}
         >
           Submit
