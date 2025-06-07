@@ -17,7 +17,7 @@ const SingleRecipe = ({ id, setIsOpen }) => {
   if (error) return <div>Error loading recipe</div>;
   return (
     <div className="flex flex-col gap-5 h-[70vh] overflow-y-auto">
-      <div className="flex justify-end">
+      <div className="flex justify-end mr-4 lg:mr-4">
         <button onClick={() => setIsOpen(false)}>Close</button>
       </div>
       <div className="space-y-2 lg:space-y-4">
