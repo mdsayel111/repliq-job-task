@@ -37,7 +37,7 @@ const RecipesList = () => {
 
   useEffect(() => {
     if (data) {
-      setRecipes(data);
+      setRecipes(data?.recipes);
     }
   }, [data]);
 

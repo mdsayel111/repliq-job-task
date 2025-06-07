@@ -1,14 +1,19 @@
 "use client";
 import { setUser } from "@/redux/slices/user-slice";
 import axiosInstance from "@/utils/axios-instance";
-// import { cookies } from "next/headers";
 import Link from "next/link";
+import { useRef } from "react";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 
 const Navbar = () => {
+  const navCloseBtnRef = useRef(null);
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user?.user);
+
+  const handleNavClose = () => {
+    navCloseBtnRef.current.click();
+  };
 
   const handleLogout = async () => {
     try {
@@ -31,6 +36,7 @@ const Navbar = () => {
           />
           <div className="w-full px-6 flex justify-between lg:w-max md:px-0 z-30">
             <Link
+              onClick={handleNavClose}
               href="/"
               aria-label="logo"
               className="flex space-x-2 items-center"
@@ -42,6 +48,7 @@ const Navbar = () => {
 
             <div className="flex items-center lg:hidden max-h-10">
               <label
+                ref={navCloseBtnRef}
                 role="button"
                 htmlFor="toggle_nav"
                 aria-label="hamburger"
@@ -65,11 +72,13 @@ const Navbar = () => {
             htmlFor="toggle_nav"
             className="hidden peer-checked:block fixed w-full h-full left-0 top-0 z-10 bg-yellow-200  bg-opacity-30 backdrop-blur backdrop-filter"
           ></label>
-          <div className="hidden peer-checked:flex w-full flex-col lg:flex lg:flex-row justify-end z-30 items-center gap-y-6 p-6 rounded-xl bg-white  lg:gap-y-0 lg:p-0 md:flex-nowrap lg:bg-transparent lg:w-7/12">
+          <div className="hidden peer-checked:flex w-full flex-col lg:flex lg:flex-row justify-end z-30 items-center gap-y-6 p-6 rounded-xl bg-white  lg:gap-y-0 lg:p-0 md:flex-nowrap lg:bg-transparent lg:w-[64%]">
             <div className="text-gray-600 lg:pr-4 flex-grow">
               <ul className="tracking-wide font-medium text-sm flex flex-col gap-y-6 lg:gap-y-0 lg:flex-row w-full">
                 <li>
                   <Link
+                    onClick={handleNavClose}
+                    htmlFor="toggle_nav"
                     href="/all-recipes"
                     className="block md:px-4 transition hover:text-yellow-700"
                   >
@@ -78,6 +87,8 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link
+                    onClick={handleNavClose}
+                    htmlFor="toggle_nav"
                     href="/add-recipe"
                     className="block md:px-4 transition hover:text-yellow-700"
                   >
@@ -86,6 +97,8 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link
+                    onClick={handleNavClose}
+                    htmlFor="toggle_nav"
                     href="/cart"
                     className="block md:px-4 transition hover:text-yellow-700"
                   >
@@ -94,6 +107,8 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link
+                    onClick={handleNavClose}
+                    htmlFor="toggle_nav"
                     href="/wishlist"
                     className="block md:px-4 transition hover:text-yellow-700"
                   >
@@ -107,6 +122,7 @@ const Navbar = () => {
               <div className="w-full min-w-max space-y-2 border-yellow-200 lg:space-y-0 sm:w-max lg:border-l ">
                 <Link href={"/sign-up"}>
                   <button
+                    onClick={handleNavClose}
                     type="button"
                     title="Start buying"
                     className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
@@ -118,6 +134,7 @@ const Navbar = () => {
                 </Link>
                 <Link href={"/login"}>
                   <button
+                    onClick={handleNavClose}
                     title="Start buying"
                     className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
                   >
@@ -129,7 +146,10 @@ const Navbar = () => {
               </div>
             ) : (
               <button
-                onClick={handleLogout}
+                onClick={() => {
+                  handleLogout();
+                  handleNavClose();
+                }}
                 title="Start buying"
                 className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
               >
