@@ -9,7 +9,6 @@ export default function StepsForm({ setStep }) {
   const dispatch = useDispatch();
   const stepFromStore = useSelector((state) => state.recipe.steps);
   const ingredientsFromStore = useSelector((state) => state.recipe.ingredients);
-  console.log(ingredientsFromStore);
   const [steps, setSteps] = useState(stepFromStore);
   const [currentStep, setCurrentStep] = useState("");
   const [isNextBtnDisabled, setIsNextBtnDisabled] = useState(true);

@@ -6,7 +6,6 @@ export async function PATCH(request, { params }) {
   await connectDB();
 
   const { data } = await request.json();
-  console.log(data, email, "data");
   const cartDoc = await Cart.findOne({ email });
 
   let updatedCart;

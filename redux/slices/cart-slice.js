@@ -21,7 +21,6 @@ const cartSlice = createSlice({
     removeFromCart: (state, action) => {
       const { id, email } = action.payload;
       state.carts = state.carts.filter((item) => item._id !== id);
-      console.log(email);
       if (email) {
         syncCartWithDB(state.carts, email);
       }

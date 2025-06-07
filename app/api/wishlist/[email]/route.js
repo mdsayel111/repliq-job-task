@@ -12,9 +12,7 @@ export async function PATCH(request, { params }) {
 
   if (wishlistDoc) {
     const existingIds = new Set(wishlistDoc.cart.map((item) => item._id));
-    console.log(existingIds, "existingIds wishlist");
     const newItems = data.filter((item) => !existingIds.has(item._id));
-    console.log(newItems, "newItems wishlist");
 
     if (newItems.length > 0) {
       updatedWishlist = await wishlist.findOneAndUpdate(

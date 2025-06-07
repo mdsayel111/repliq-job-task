@@ -11,7 +11,6 @@ const SingleRecipe = ({ id, setIsOpen }) => {
     },
   });
 
-  console.log(data);
 
   if (!id) return <div>No recipe selected.</div>;
   if (isLoading) return <div>Loading...</div>;

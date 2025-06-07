@@ -25,7 +25,6 @@ const RecipesList = () => {
   const [searchQuery, setSearchQuery] = useState(null);
   const cart = useCartData();
   const wishlist = useWishlistData();
-  console.log(user, "user");
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["recipes", searchQuery],
@@ -69,7 +68,6 @@ const RecipesList = () => {
     toast.success("Added to cart");
   };
 
-  console.log(recipes, "recipes");
 
   if (error) return <div>Error loading recipes: {error.message}</div>;
 

@@ -67,7 +67,6 @@ const AllRecipes = () => {
     toast.success("Added to cart");
   };
 
-  console.log(totalPages);
 
   return (
     <div className="pt-32">

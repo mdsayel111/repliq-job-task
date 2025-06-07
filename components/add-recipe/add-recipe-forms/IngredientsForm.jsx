@@ -30,7 +30,6 @@ export default function IngredientsForm({ setStep }) {
   };
 
   const handleNext = () => {
-    console.log(ingredients, "ingredients");
     dispatch(setIngredientsAction(ingredients));
     setStep(3);
   };

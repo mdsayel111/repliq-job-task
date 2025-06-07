@@ -14,11 +14,8 @@ const wishlistSlice = createSlice({
       const { email, recipe } = action.payload;
       if (!state.wishlist.find((item) => item._id === recipe._id)) {
         state.wishlist.push(recipe);
-        console.log(state?.wishlist, "wishlist");
         if (email) {
-          console.log("Before sync:", state.wishlist);
           syncWishlistWithDB(state.wishlist, email);
-          console.log("After sync:", state.wishlist);
         }
       }
     },
