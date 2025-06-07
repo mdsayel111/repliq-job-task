@@ -26,7 +26,6 @@ export default function Login() {
       toast.success("Login successful");
       router.push("/");
     } catch (error) {
-      console.log(error);
       if (error?.response?.status === 401) {
         return toast.error("Email or password is incorrect");
       }

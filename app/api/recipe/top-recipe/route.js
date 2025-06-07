@@ -1,13 +1,6 @@
 import Recipe from "@/models/recipe";
 import connectDB from "@/utils/DB";
 
-export async function POST(request) {
-  const body = await request.json();
-  await connectDB();
-  const resData = await Recipe.create(body);
-  return Response.json(resData);
-}
-
 export async function GET(request) {
   const url = new URL(request.url);
   const searchTerm = url.searchParams.get("q");
@@ -19,7 +12,7 @@ export async function GET(request) {
     const regex = new RegExp(searchTerm, "i");
     recipes = await Recipe.find({
       $or: [{ title: regex }, { ingredients: regex }, { category: regex }],
-    });
+    }).sort({ createdAt: -1 });
   } else {
     recipes = await Recipe.find();
   }

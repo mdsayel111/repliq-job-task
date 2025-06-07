@@ -6,20 +6,30 @@ import recipeReducer from "./slices/add-recipe-slice.js";
 import cartReducer from "./slices/cart-slice.js";
 import wishlistReducer from "./slices/wishlist-slice.js";
 
-const persistConfig = {
-  key: "root",
+const userPersistConfig = {
+  key: "user",
+  storage,
+};
+const cartPersistConfig = {
+  key: "cart",
   storage,
 };
 
-const persistedUseReducer = persistReducer(persistConfig, userReducer);
-const persistedCartReducer = persistReducer(persistConfig, cartReducer);
+const wishlistPersistConfig = {
+  key: "wishlist",
+  storage,
+};
+
+const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
+const persistedCartReducer = persistReducer(cartPersistConfig, cartReducer);
 const persistedWishlistReducer = persistReducer(
-  persistConfig,
+  wishlistPersistConfig,
   wishlistReducer
 );
+
 export const store = configureStore({
   reducer: {
-    user: persistedUseReducer,
+    user: persistedUserReducer,
     recipe: recipeReducer,
     cart: persistedCartReducer,
     wishlist: persistedWishlistReducer,

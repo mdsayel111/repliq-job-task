@@ -5,20 +5,16 @@ export default function Cart({ data }) {
   return (
     <div className="flex justify-between items-center">
       <Image
-        src={data.strMealThumb}
+        src={data.coverImage}
         alt="Cart"
         width={500}
         height={500}
         className="w-[10%] aspect-square border border-yellow-300 rounded-lg"
       />
       <h1 className="text-lg font-semibold w-[30%] text-center">
-        {data?.strMeal}
+        {data?.title}
       </h1>
-      <p className="w-[50%] text-center">
-        Obcaecati, quam? Eligendi, nulla numquam natus laborum porro at cum,
-        consectetur ullam tempora ipsa iste officia sed officiis! Incidunt ea
-        animi officiis.
-      </p>
+      <p className="w-[50%] text-center">{data?.description}</p>
       {/* <div className="flex gap-4 items-center">
         <button className="p-2 bg-yellow-500 rounded-full">
           <FiMinus />

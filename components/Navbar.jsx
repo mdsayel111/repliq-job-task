@@ -16,7 +16,6 @@ const Navbar = () => {
       dispatch(setUser({}));
       toast.success("Logged out successfully");
     } catch(error) {
-      console.log(error);
       toast.error("Something went wrong");
     }
   };
@@ -99,6 +98,14 @@ const Navbar = () => {
                     className="block md:px-4 transition hover:text-yellow-700"
                   >
                     <span>Cart</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/wishlist"
+                    className="block md:px-4 transition hover:text-yellow-700"
+                  >
+                    <span>Wishlist</span>
                   </Link>
                 </li>
               </ul>

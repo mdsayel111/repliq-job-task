@@ -8,7 +8,6 @@ import React, { useState } from "react";
 
 export default function Page() {
   const [step, setStep] = useState(1);
-  console.log(step);
   const renderComponent = () => {
     switch (step) {
       case 1:

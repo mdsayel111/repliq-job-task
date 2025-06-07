@@ -1,5 +1,4 @@
 "use client";
-import HttpKit from "@/common/helpers/HttpKit";
 import Modal from "@/components/Modal";
 import RecipeCard from "@/components/Recipes/RecipeCard";
 import SingleRecipe from "@/components/Recipes/SingleRecipe";
@@ -11,6 +10,7 @@ import {
   addToWishlist,
   removeFromWishlist,
 } from "@/redux/slices/wishlist-slice";
+import fetchData from "@/utils/fetch-data";
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -23,11 +23,16 @@ const AllRecipes = () => {
   const user = useSelector((state) => state.user?.user);
   const [openDetails, setOpenDetails] = useState(false);
   const [recipeId, setRecipeId] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState(null);
+
   const { data, isLoading, error } = useQuery({
     queryKey: ["recipes"],
-    queryFn: HttpKit.getTopRecipes,
+    queryFn: async () => {
+      const resData = await fetchData(`/recipe?q=${searchInput}`);
+      return resData;
+    },
   });
-
 
   const handleDetailsOpen = (id) => {
     setRecipeId(id);
@@ -36,9 +41,7 @@ const AllRecipes = () => {
 
   const handleAddToWishlist = (recipe, isWishlist) => {
     if (isWishlist) {
-      dispatch(
-        removeFromWishlist({ idMeal: recipe?.idMeal, email: user?.email })
-      );
+      dispatch(removeFromWishlist({ id: recipe?._id, email: user?.email }));
       toast.success("Removed from wishlist");
       return;
     }
@@ -47,11 +50,11 @@ const AllRecipes = () => {
   };
 
   const handleAddToCart = (recipe) => {
-    if (cart.find((item) => item.idMeal === recipe?.idMeal)) {
+    if (cart.find((item) => item._id === recipe?._id)) {
       toast.error("Product already in cart");
       return;
     }
-    dispatch(addToCart({recipe: { ...recipe, quantity: 1 }, email: user?.email}));
+    dispatch(addToCart({ recipe, email: user?.email }));
     toast.success("Added to cart");
   };
 
@@ -62,15 +65,13 @@ const AllRecipes = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
           {data?.map((recipe) => (
             <RecipeCard
-              key={recipe?.id}
+              key={recipe?._id}
               recipe={recipe}
               handleDetailsOpen={handleDetailsOpen}
               hasBtn={true}
               handleAddToWishlist={handleAddToWishlist}
               handleAddToCart={handleAddToCart}
-              isWishlist={wishlist.find(
-                (item) => item.idMeal === recipe?.idMeal
-              )}
+              isWishlist={wishlist.find((item) => item?._id === recipe?._id)}
             />
           ))}
         </div>

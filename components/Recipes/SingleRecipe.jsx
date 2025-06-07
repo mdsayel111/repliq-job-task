@@ -4,13 +4,11 @@ import Image from "next/image";
 import React from "react";
 
 const SingleRecipe = ({ id, setIsOpen }) => {
-  console.log(id, "SingleRecipe");
   const { data, isLoading, error } = useQuery({
     queryKey: ["recipe-details"],
     queryFn: () => HttpKit.getRecipeDetails(id),
   });
 
-  console.log(data);
 
   if (!id) return <div>No recipe selected.</div>;
   if (isLoading) return <div>Loading...</div>;

@@ -1,21 +1,38 @@
 "use client";
-import HttpKit from "@/common/helpers/HttpKit";
+import useCartData from "@/hooks/useCartData";
+import useWishlistData from "@/hooks/useWishlistData";
+import { addToCart } from "@/redux/slices/cart-slice";
+import fetchData from "@/utils/fetch-data";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "../Modal";
 import RecipeCard from "./RecipeCard";
 import SingleRecipe from "./SingleRecipe";
+import toast from "react-hot-toast";
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from "@/redux/slices/wishlist-slice";
 
 const RecipesList = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user?.user);
   const [openDetails, setOpenDetails] = useState(false);
   const [recipeId, setRecipeId] = useState("");
   const [recipes, setRecipes] = useState([]);
-  const [searchInput, setSearchInput] = useState("abc");
+  const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState(null);
+  const cart = useCartData();
+  const wishlist = useWishlistData();
+  console.log(user, "user");
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["recipes"],
-    queryFn: HttpKit.getTopRecipes,
+    queryKey: ["recipes", searchQuery],
+    queryFn: async () => {
+      const resData = await fetchData(`/recipe/top-recipe?q=${searchInput}`);
+      return resData;
+    },
   });
 
   useEffect(() => {
@@ -33,7 +50,25 @@ const RecipesList = () => {
     setOpenDetails(true);
   };
 
-  if (isLoading) return <div>Loading recipes...</div>;
+  const handleAddToWishlist = (recipe, isWishlist) => {
+    if (isWishlist) {
+      dispatch(removeFromWishlist({ id: recipe?._id, email: user?.email }));
+      toast.success("Removed from wishlist");
+      return;
+    }
+    dispatch(addToWishlist({ recipe, email: user?.email }));
+    toast.success("Added to wishlist");
+  };
+
+  const handleAddToCart = (recipe) => {
+    if (cart.find((item) => item._id === recipe?._id)) {
+      toast.error("Product already in cart");
+      return;
+    }
+    dispatch(addToCart({ recipe, email: user?.email }));
+    toast.success("Added to cart");
+  };
+
   if (error) return <div>Error loading recipes: {error.message}</div>;
 
   return (
@@ -48,12 +83,7 @@ const RecipesList = () => {
                 placeholder="Your favorite food"
                 className="w-full p-4 rounded-full outline-none bg-transparent "
                 type="text"
-                onChange={(e) =>
-                  setSearchInput((prev) => ({
-                    ...prev,
-                    value: e.target.value,
-                  }))
-                }
+                onChange={(e) => setSearchInput(e.target.value)}
               />
               <button
                 onClick={() => handleSearch()}
@@ -78,22 +108,31 @@ const RecipesList = () => {
         </div>
         <div className="relative py-16">
           <div className="container relative m-auto px-6 text-gray-500 md:px-12">
-            <div className="grid gap-6 md:mx-auto md:w-8/12 lg:w-full lg:grid-cols-3">
-              {recipes?.map((recipe) => (
-                <RecipeCard
-                  key={recipe?.id}
-                  recipe={recipe}
-                  handleDetailsOpen={handleDetailsOpen}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <>Loading recipes...</>
+            ) : (
+              <div className="grid gap-6 md:mx-auto md:w-8/12 lg:w-full lg:grid-cols-3">
+                {recipes?.map((recipe) => (
+                  <RecipeCard
+                    key={recipe?._id}
+                    recipe={recipe}
+                    handleDetailsOpen={handleDetailsOpen}
+                    hasBtn={true}
+                    handleAddToWishlist={handleAddToWishlist}
+                    handleAddToCart={handleAddToCart}
+                    isWishlist={wishlist.find(
+                      (item) => item?._id === recipe?._id
+                    )}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
       {/* Modal*/}
       <Modal isOpen={openDetails} setIsOpen={setOpenDetails}>
-        {console.log(recipeId, "recipeId")}
         {recipeId && <SingleRecipe id={recipeId} setIsOpen={setOpenDetails} />}
       </Modal>
     </div>

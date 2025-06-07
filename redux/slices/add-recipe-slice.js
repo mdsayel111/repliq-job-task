@@ -18,7 +18,6 @@ const recipeSlice = createSlice({
       state.info = action.payload;
     },
     setIngredients: (state, action) => {
-      console.log(action.payload, "action.payload");
       state.ingredients = action.payload;
     },
     setSteps: (state, action) => {

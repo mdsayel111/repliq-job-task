@@ -1,4 +1,5 @@
 import { syncCartWithDB } from "@/utils/cart";
+import { syncWishlistWithDB } from "@/utils/wishlist";
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -11,15 +12,22 @@ const wishlistSlice = createSlice({
   reducers: {
     addToWishlist: (state, action) => {
       const { email, recipe } = action.payload;
-      if (!state.wishlist.find((item) => item.idMeal === recipe.idMeal)) {
+      if (!state.wishlist.find((item) => item._id === recipe._id)) {
         state.wishlist.push(recipe);
-        syncCartWithDB(state.wishlist, email);
+        console.log(state?.wishlist, "wishlist");
+        if (email) {
+          console.log("Before sync:", state.wishlist);
+          syncWishlistWithDB(state.wishlist, email);
+          console.log("After sync:", state.wishlist);
+        }
       }
     },
     removeFromWishlist: (state, action) => {
-      const { email, idMeal } = action.payload;
-      state.wishlist = state.wishlist.filter((item) => item.idMeal !== idMeal);
-      syncCartWithDB(state.wishlist, email);
+      const { email, id } = action.payload;
+      state.wishlist = state.wishlist.filter((item) => item._id !== id);
+      if (email) {
+        syncCartWithDB(state.wishlist, email);
+      }
     },
     setWishlist: (state, action) => {
       state.wishlist = action.payload;

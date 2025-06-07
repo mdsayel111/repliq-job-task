@@ -49,7 +49,6 @@ export default function ImagesForm({ setStep }) {
       toast.success("Recipe submitted successfully");
       router.push("/all-recipes");
     } catch (error) {
-      console.log(error);
       toast.error("Something went wrong");
     }
   };
