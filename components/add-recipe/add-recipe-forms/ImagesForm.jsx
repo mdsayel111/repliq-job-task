@@ -1,6 +1,6 @@
 "use client";
 
-import FileInput from "@/components/shared/input/FIleInput";
+import FileInput from "@/components/shared/input/FileInput";
 import axiosInstance from "@/utils/axios-instance";
 import { uploadImage } from "@/utils/upload-image";
 import Image from "next/image";
